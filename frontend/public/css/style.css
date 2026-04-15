@@ -1,0 +1,44 @@
+*{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+}
+
+body{
+	min-height:100vh;
+}
+
+#app{
+	height:calc(100vh - 56px);
+	display:grid;
+	place-items:center;
+}
+/* globale utilities style */
+.login-page{
+	background-color: #f7f9fb;
+}
+
+#formCard .form-group label{
+	width:100%;
+}
+
+/* form card styling */
+#formCard{
+	max-width:500px;
+}
+
+#formCard.card{
+	border-color:transparent;
+	box-shadow:0 4px 8px rgba(0,0,0,.05);
+}
+
+/* button styling */
+#formCard .btn.btn-block{
+	padding:12px 10px;
+	width:100%;
+}
+
+#logoutBtn{
+	color:rgba(0, 0, 255, 0.847);
+	cursor: pointer;
+}

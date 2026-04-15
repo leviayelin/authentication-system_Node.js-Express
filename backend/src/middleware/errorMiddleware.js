@@ -1,0 +1,12 @@
+// Error handling section 
+// note - centerilze the error handling functions
+
+export const errorHandler = (err,req,res,next)=>{
+    console.error(err);
+    const status = err.status || 500
+    res.status(status).json({
+        error:err.message || "Server error"
+    });
+};
+
+// ** after creation, attach to app for use
