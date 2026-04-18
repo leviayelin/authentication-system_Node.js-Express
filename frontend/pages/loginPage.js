@@ -50,7 +50,6 @@ export const renderLogin = () =>{
         // clear messages
         clearMessages(messages); 
         
-
         // creating new  object of form data 
         const formData = new FormData(form);
         // attached field data to veriable 
@@ -72,9 +71,7 @@ export const renderLogin = () =>{
 
         try{
             // get token throgh auth login service api 
-            const result = await login(data);
-            // conditions for saving gotten token
-            localStorage.setItem("token", result.token);
+            await login(data);
             window.history.pushState({},"","/dashboard");
             router();
         }catch(err){

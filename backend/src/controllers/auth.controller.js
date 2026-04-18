@@ -30,7 +30,13 @@ export const login = async(req,res,next) =>{
             return res.status(400).json({message:"email & password required!"});
         };
         const token = await loginUser(req.body);
-        res.status(200).json({token});
+        // cookies
+        res.cookie("token", token,{
+            httpOnly:true,
+            secure:false,
+            sameSite:"Lax"
+        });
+        res.status(200).json({message:"Login successfull"});
     }catch(err){
         // middleware error handling
         next(err);
@@ -45,5 +51,11 @@ export const getProfile = async(req,res,next)=>{
     }catch(err){
         // middleware error handling
         next(err);
-    }
-}
+    };
+};
+
+// logout - clear remain cookies in browser + logout user
+export const logout = (req,res)=>{
+    res.clearCookie("token");
+    res.json({message:"Loged out"});
+};

@@ -6,8 +6,9 @@ export const setLoading = (button, isLoading  ) =>{
 };
 
 //  messages - show message
-export const showMessages = (el, text) =>{
+export const showMessages = (el, text, type="error") =>{
     el.textContent = text;
+    el.style.color = type === "error" ?"red":"green";
 };
 
 // message - clear message

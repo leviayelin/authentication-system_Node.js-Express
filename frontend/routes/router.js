@@ -5,8 +5,8 @@
 import { renderDashboard } from "../pages/dashboardPage.js";
 import { renderLogin } from "../pages/loginPage.js";
 import { renderRegister } from "../pages/registerPage.js";
-import { requireAuth } from "../guard/auth.guard.js";
 import { renderNavbar } from "../components/navbar.js";
+import { authRequirment } from "../utils/authentication.js";
 
 // setting routes 
 const routes = {
@@ -22,7 +22,7 @@ export const router = () =>{
     // getting url path
     const path = window.location.pathname;
     // protected dashboard access requirment
-    if(path === '/dashboard' && !requireAuth()){
+    if(path === '/dashboard' && !authRequirment){
         // re-route if requirements not met 
         window.history.pushState({},"","/login");
         return renderLogin();

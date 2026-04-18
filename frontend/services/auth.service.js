@@ -40,3 +40,10 @@ export const getProfile = async()=>{
         return null;
     };
 };
+
+// logout 
+export const logout = async()=>{
+    return await apiFetch(`${API_URL}/auth/logout`,{
+        method:"POST"
+    });
+};

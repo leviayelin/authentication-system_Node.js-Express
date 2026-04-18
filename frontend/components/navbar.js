@@ -1,12 +1,20 @@
 // Import section 
 import { router } from "../routes/router.js";
+import { getProfile, logout } from "../services/auth.service.js";
 
 // Navbar Component
-export const renderNavbar = ()=>{
+export const renderNavbar = async()=>{
     const navbar = document.getElementById('navbar');
-    const token = localStorage.getItem("token");
-
-    if(token){
+    let isAuth = false;
+    try{
+        const res = await getProfile();
+        if(res?.user){
+            isAuth = true
+        }
+    }catch(err){
+        isAuth = false
+    }
+    if(isAuth){
         // loged-in user navbar
         navbar.innerHTML = `
             <nav class="navbar navbar-expand">
@@ -51,11 +59,10 @@ export const renderNavbar = ()=>{
     const logoutBtn = document.getElementById('logoutBtn');
 
     if(logoutBtn){
-        logoutBtn.addEventListener('click',()=>{
-            localStorage.removeItem("token");
-
+        logoutBtn.addEventListener('click',async ()=>{
+            await logout();
             window.history.pushState({},"","/login");
             router();
-        })
-    }
-}
+        });
+    };
+};

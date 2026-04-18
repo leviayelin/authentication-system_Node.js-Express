@@ -3,7 +3,7 @@
 // ===========================
 // Import section 
 import { router } from "../routes/router.js";
-import { getProfile } from "../services/auth.service.js";
+import { getProfile, logout } from "../services/auth.service.js";
 
 export const renderDashboard = async()=>{
     const app = document.getElementById('app');
@@ -18,9 +18,8 @@ export const renderDashboard = async()=>{
         </section>
         `;
     }catch(err){
-        app.innerHTML = `<p style="color:red;">${err.message}</p>`;
         // remove token if expired/not good
-        localStorage.removeItem("token");
+        await logout();
         window.history.pushState({},"","/login");
         router();
     };
