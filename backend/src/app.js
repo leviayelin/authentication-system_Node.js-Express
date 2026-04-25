@@ -1,17 +1,10 @@
 // import section 
 import express from 'express';
 import cors from 'cors';
+import { corsOption } from './config/env.js';
 import cookieParser from 'cookie-parser';
 import authRouter from './router/auth.authRouter.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
-
-// cors setting 
-const corsOption = {
-    origin:"http://localhost:8080",// authorized sites
-    methods:['GET','POST'],
-    allowedHeaders:['Content-Type'],
-    credentials:true // cookies info enable
-};
 
 //app usage settings
 const app = express();

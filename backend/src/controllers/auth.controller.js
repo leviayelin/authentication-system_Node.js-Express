@@ -1,5 +1,9 @@
 // import section
 import { registerUser, loginUser, getUserProfile } from "../service/auth.service.js";
+import jwt from "jsonwebtoken"
+import 'dotenv/config'
+import { env } from "../config/env.js";
+import { generateToken } from "../utils/generateToken.js";
 
 // register request handling
 export const register = async (req,res,next)=>{
@@ -29,33 +33,77 @@ export const login = async(req,res,next) =>{
         if(!email || !password){
             return res.status(400).json({message:"email & password required!"});
         };
-        const token = await loginUser(req.body);
-        // cookies
-        res.cookie("token", token,{
+        const {accessToken, refreshToken} = await loginUser(req.body);
+        // cookies : access + refresh
+        res.cookie("accessToken", accessToken,{
             httpOnly:true,
-            secure:false,
+            secure:process.env.COOKIE_SECURE,
+            maxAge:1000 * 60 * 15,
             sameSite:"Lax"
         });
-        res.status(200).json({message:"Login successfull"});
+
+        res.cookie("refreshToken", refreshToken,{
+            httpOnly:true,
+            secure:process.env.COOKIE_SECURE,
+            maxAge:1000 * 60 * 60 * 24 * 7,
+            sameSite:"Lax"
+        });
+
+        return res.status(200).json({message:"Login successfull"});
     }catch(err){
         // middleware error handling
         next(err);
     };
+};
+
+// refresh route 
+export const getRefreshToken = (req,res)=>{
+    const token = req.cookies.refreshToken;
+
+    if(!token){
+        return res.status(401).json({message:"No Refresh Token"});
+    };
+    try{
+        const decoded = jwt.verify(token, env.ref_secret);
+
+        const newAccessToken = generateToken({
+            userId:decoded.userId,
+            email:decoded.email
+        },env.jwt_secret,"15m");
+
+        res.cookie("accessToken", newAccessToken,{
+            httpOnly:true,
+            secure:process.env.COOKIE_SECURE,
+            maxAge:1000 * 60 * 15,
+            sameSite:"Lax"
+        });
+
+        return res.status(200).json({message:"Token Refreshed"});
+    }catch(err){
+        return res.status(403).json({message:"Invalid Refresh Token"});
+    }
 };
 
 // get profile request handling
 export const getProfile = async(req,res,next)=>{
     try{
         const user = await getUserProfile(req.user.userId)
-        res.status(200).json(user);
+        return res.status(200).json(user);
     }catch(err){
-        // middleware error handling
+        // middleware error handling    
         next(err);
     };
 };
 
 // logout - clear remain cookies in browser + logout user
 export const logout = (req,res)=>{
-    res.clearCookie("token");
+    res.clearCookie("_csrf");
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     res.json({message:"Loged out"});
+};
+
+// get CSRF token 
+export const getCSRFToken = (req,res)=>{
+    res.json({csrfToken: req.csrfToken()});
 };

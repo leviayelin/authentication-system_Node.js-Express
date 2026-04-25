@@ -1,6 +1,7 @@
 // import section 
 import express from 'express';
-import { register, login, getProfile, logout} from '../controllers/auth.controller.js';
+import { register, login, getProfile, logout, getCSRFToken, getRefreshToken} from '../controllers/auth.controller.js';
+import { csrfProtection } from '../middleware/csrf.middleware.js';
 import { verifyToken } from '../middleware/auth.authMiddleware.js';
 
 
@@ -8,10 +9,12 @@ import { verifyToken } from '../middleware/auth.authMiddleware.js';
 const router = express.Router();
 
 // config routes - API methods & routes
-router.post("/register", register);// new user
-router.post("/login",login);// asign token
-router.get("/profile", verifyToken,getProfile);// vrify token
-router.post("/logout", logout); // clear cookies + token
+router.get("/csrf-token", csrfProtection, getCSRFToken);
+router.post("/register",csrfProtection, register);// new user
+router.post("/login", csrfProtection, login);// asign token
+router.post("/refresh",getRefreshToken, csrfProtection); // refresh token's
+router.get("/profile", verifyToken, getProfile);// vrify token
+router.post("/logout", csrfProtection, logout); // clear cookies + token
 
 // export auth router 
 export default router;

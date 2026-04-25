@@ -2,6 +2,7 @@
 import bcrypt from 'bcrypt';
 import { createUser, getUserByEmail,findUserById } from "../repositories/user.repository.js";
 import { generateToken } from '../utils/generateToken.js';
+import { env } from '../config/env.js';
 
 // Register user
 export const registerUser = async({first_name,last_name,email,password})=>{
@@ -43,9 +44,16 @@ export const loginUser = async({email, password})=>{
         error.status = 401;
         throw error;
     };
-    //3. creating token 
-    const token = generateToken(user);
-    return token;
+    //3. generate access token 
+    const accessToken = generateToken({
+            userId:user.id,
+            email:user.email},env.jwt_secret,"15m");
+    // 3.a. generate refresh token 
+    const refreshToken = generateToken({
+            userId:user.id,
+            email:user.email},env.ref_secret,"7d");
+
+    return {accessToken,refreshToken};
 };
 
 // get user Profile

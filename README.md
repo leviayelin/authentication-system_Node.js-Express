@@ -113,6 +113,8 @@ User submits credentials
 → Server verifies user existence  
 → Password is compared using bcrypt  
 → JWT token is generated and returned  
+→ Token stored in cookies
+
 
 ![Preview](./assets/login-page.png)
 ---
@@ -131,6 +133,8 @@ Client sends request with JWT
 - Passwords are hashed using bcrypt
 - Sensitive data (password_hash) is never returned to the client
 - Protected routes require a valid JWT
+- cookie httpOnly secure session handling
+- CSRF Token protection 
 - Basic input validation is implemented
 - Regex email format check
 
