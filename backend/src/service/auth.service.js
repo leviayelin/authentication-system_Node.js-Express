@@ -1,6 +1,7 @@
 // import section 
 import bcrypt from 'bcrypt';
-import { createUser, getUserByEmail,findUserById } from "../repositories/user.repository.js";
+import jwt, { decode } from 'jsonwebtoken';
+import { createUser, getUserByEmail,findUserById, getUserRefreshToken, deleteAllUsersTokens, deleteRefreshToken, saveRefreshToken } from "../repositories/user.repository.js";
 import { generateToken } from '../utils/generateToken.js';
 import { env } from '../config/env.js';
 
@@ -47,14 +48,75 @@ export const loginUser = async({email, password})=>{
     //3. generate access token 
     const accessToken = generateToken({
             userId:user.id,
-            email:user.email},env.jwt_secret,"15m");
+            email:user.email},env.jwt_secret,"1m");
     // 3.a. generate refresh token 
     const refreshToken = generateToken({
             userId:user.id,
             email:user.email},env.ref_secret,"7d");
-
+    
+    const hashed = await bcrypt.hash(refreshToken,10);
+    await saveRefreshToken({
+        userId:user.id,
+        token:hashed,
+        expireAt: new Date(Date.now() + 7*24*60*60*1000)
+        });        
+          
     return {accessToken,refreshToken};
 };
+
+// refresh tokens rotation : reuse detection
+export const refreshTokenService = async(token)=>{
+
+    if(!token){
+        throw new Error("No token");
+    };
+    let decoded;
+    try{
+         decoded = jwt.verify(token,env.ref_secret);
+    }catch(err){
+        throw new Error("Invalid refresh token");
+    };
+    const tokens = await getUserRefreshToken(decoded.userId);
+    let validToken = null; // placeholder for validation checking
+    for(let t of tokens){
+        const match = await bcrypt.compare(token, t.token);
+        if(match){
+            validToken = t;
+            break;
+        };
+    };
+    // token reuse detection 
+    if(!validToken){
+        await deleteAllUsersTokens(decoded.userId);
+        throw new Error("Reuse detected");
+    };
+    // delete old token 
+    await deleteRefreshToken(validToken.id);
+    // create new token : access token
+    const accessToken  = generateToken(
+        {
+        userId:decoded.userId,
+        email:decoded.email},
+        env.jwt_secret,"1m");
+    // create new token : refresh token
+    const refreshToken = generateToken(
+        {
+        userId:decoded.userId,
+        email:decoded.email
+        },
+        env.ref_secret,"7d");
+    // refreshed token : hashing 
+    const hashed = await bcrypt.hash(refreshToken,10);
+
+    await saveRefreshToken({
+        userId:decoded.userId,
+        token:hashed,
+        expireAt:new Date(Date.now()+ 7*24*60*60*1000)
+    });
+
+    return {accessToken, refreshToken};
+};
+
 
 // get user Profile
 export const getUserProfile = async (userId)=>{
@@ -70,3 +132,4 @@ export const getUserProfile = async (userId)=>{
     user:safeUser
     };  
 };
+

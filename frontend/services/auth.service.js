@@ -36,7 +36,7 @@ export const getProfile = async()=>{
     try{
         return await apiFetch(`${API_URL}/auth/profile`);
     }catch(err){
-        console.log(`Failed to fetch data ${err.message}`);
+        console.log(`Failed to fetch data: ${err.message}`);
         return null;
     };
 };

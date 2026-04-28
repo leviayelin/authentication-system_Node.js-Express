@@ -1,9 +1,11 @@
 // import section
-import { registerUser, loginUser, getUserProfile } from "../service/auth.service.js";
-import jwt from "jsonwebtoken"
-import 'dotenv/config'
+import { registerUser, loginUser, getUserProfile, refreshTokenService } from "../service/auth.service.js";
+import jwt from "jsonwebtoken";
+import 'dotenv/config';
+import bcrypt from 'bcrypt';
 import { env } from "../config/env.js";
 import { generateToken } from "../utils/generateToken.js";
+import { saveRefreshToken } from "../repositories/user.repository.js";
 
 // register request handling
 export const register = async (req,res,next)=>{
@@ -34,21 +36,22 @@ export const login = async(req,res,next) =>{
             return res.status(400).json({message:"email & password required!"});
         };
         const {accessToken, refreshToken} = await loginUser(req.body);
+
         // cookies : access + refresh
         res.cookie("accessToken", accessToken,{
             httpOnly:true,
             secure:process.env.COOKIE_SECURE,
-            maxAge:1000 * 60 * 15,
+            maxAge:1000 * 60 * 1,
             sameSite:"Lax"
         });
-
+        
         res.cookie("refreshToken", refreshToken,{
             httpOnly:true,
             secure:process.env.COOKIE_SECURE,
             maxAge:1000 * 60 * 60 * 24 * 7,
             sameSite:"Lax"
         });
-
+        
         return res.status(200).json({message:"Login successfull"});
     }catch(err){
         // middleware error handling
@@ -57,30 +60,32 @@ export const login = async(req,res,next) =>{
 };
 
 // refresh route 
-export const getRefreshToken = (req,res)=>{
+export const refreshToken = async(req,res,next)=>{
     const token = req.cookies.refreshToken;
-
     if(!token){
         return res.status(401).json({message:"No Refresh Token"});
     };
     try{
-        const decoded = jwt.verify(token, env.ref_secret);
+        const {accessToken, refreshToken} = await refreshTokenService(token);
 
-        const newAccessToken = generateToken({
-            userId:decoded.userId,
-            email:decoded.email
-        },env.jwt_secret,"15m");
-
-        res.cookie("accessToken", newAccessToken,{
+        res.cookie("accessToken", accessToken,{
             httpOnly:true,
             secure:process.env.COOKIE_SECURE,
-            maxAge:1000 * 60 * 15,
+            maxAge:1000 * 60 * 1,
             sameSite:"Lax"
         });
 
+        res.cookie("refreshToken", refreshToken,{
+            httpOnly:true,
+            secure:process.env.COOKIE_SECURE,
+            maxAge:1000 * 60 * 60 * 24 * 7,
+            sameSite:"Lax"
+        })
+
         return res.status(200).json({message:"Token Refreshed"});
     }catch(err){
-        return res.status(403).json({message:"Invalid Refresh Token"});
+        // return res.status(403).json({message:"Invalid Refresh Token"});
+        next(err)
     }
 };
 

@@ -24,11 +24,13 @@ export const apiFetch = async(url, options={})=>{
         headers
     });
     // eccess token expired
-    if(res.status === 401){
+    if(res.status === 401 && !options._retry){
+
         // prevent infinite loop
-        if(url.includes("/refresh")){
-            throw new Error("Session expired");
-        };
+        options._retry = true
+        // if(url.includes("/refresh")){
+        //     throw new Error("Session expired");
+        // };
         
         // refresh attempts
         const refreshRes = await fetch("http://localhost:3000/api/auth/refresh",{
