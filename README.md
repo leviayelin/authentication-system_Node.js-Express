@@ -22,6 +22,7 @@ This project was created to practice:
 - MVC design pattern
 - Full-stack JavaScript development
 - Working with PostgreSQL
+- Authentication, Data integrity & Security
 
 ---
 
@@ -29,7 +30,7 @@ This project was created to practice:
 
 This project is an authentication system built using Node.js, Express, and PostgreSQL.
 
-It includes core features such as user registration, login, JWT-based authentication, and protected routes.
+It includes core features such as user registration, login, JWT-based authentication, security, and protected routes.
 
 The system follows a client–server architecture, where the client communicates with the server through a REST API.
 
@@ -89,6 +90,7 @@ The backend is structured using a layered architecture inspired by the MVC patte
                 ├── services /      # business loginc
                 ├── repositories /  # database queries
                 ├── db /            # database connection
+                ├── utils /         # utilities function
                 └── config /        # app configuration
         
 
@@ -156,7 +158,7 @@ Run the server:
 ## Future Improvements
 
 - Implement advanced validation (e.g. Joi / Zod)
-- Add refresh token mechanism
+- Add refresh token mechanism (refresh token rotation)
 - Rate limiter
 - Coockies (httpOnly)
 - Improve error handling with centralized middleware
