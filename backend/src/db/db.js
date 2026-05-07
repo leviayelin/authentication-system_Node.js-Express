@@ -1,12 +1,12 @@
 // import section 
+import { poolOption } from '../config/env.js';
 import {Pool} from 'pg';
-import { env } from '../config/env.js';
 
 // setting database connection
 export const pool = new Pool({
-    user:env.db_user,
-    database:env.db_name,
-    host:env.db_host,
-    password:env.db_password,
-    port:env.db_port
+    user:poolOption.db_user,
+    database:poolOption.db_name,
+    host:poolOption.db_host,
+    password:poolOption.db_password,
+    port:poolOption.db_port
 }); 

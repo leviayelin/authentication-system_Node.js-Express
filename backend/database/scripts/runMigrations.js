@@ -1,4 +1,5 @@
 // Import section 
+import 'dotenv/config'
 import { pool } from "../../src/db/db.js";
 import fs from 'fs';
 import path from "path";

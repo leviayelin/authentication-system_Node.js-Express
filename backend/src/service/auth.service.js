@@ -1,9 +1,9 @@
 // import section 
+import { tokenKeys } from '../config/env.js';
 import bcrypt from 'bcrypt';
 import jwt, { decode } from 'jsonwebtoken';
 import { createUser, getUserByEmail,findUserById, getUserRefreshToken, deleteAllUsersTokens, deleteRefreshToken, saveRefreshToken } from "../repositories/user.repository.js";
 import { generateToken } from '../utils/generateToken.js';
-import { env } from '../config/env.js';
 
 // Register user
 export const registerUser = async({first_name,last_name,email,password})=>{
@@ -39,7 +39,7 @@ export const loginUser = async({email, password})=>{
         throw error;
     };
     //2. check password
-    const isMatch = await bcrypt.compare(password, user.password_hash);
+    const isMatch = await bcrypt.compare(password, user.hash_password);
     if(!isMatch){
         const error = new Error("Invalid password")
         error.status = 401;
@@ -48,11 +48,11 @@ export const loginUser = async({email, password})=>{
     //3. generate access token 
     const accessToken = generateToken({
             userId:user.id,
-            email:user.email},env.jwt_secret,"1m");
+            email:user.email},tokenKeys.jwt_secret,"1m");
     // 3.a. generate refresh token 
     const refreshToken = generateToken({
             userId:user.id,
-            email:user.email},env.ref_secret,"7d");
+            email:user.email},tokenKeys.refresh_secret,"7d");
     
     const hashed = await bcrypt.hash(refreshToken,10);
     await saveRefreshToken({
@@ -72,7 +72,7 @@ export const refreshTokenService = async(token)=>{
     };
     let decoded;
     try{
-         decoded = jwt.verify(token,env.ref_secret);
+         decoded = jwt.verify(token,tokenKeys.refresh_secret);
     }catch(err){
         throw new Error("Invalid refresh token");
     };
@@ -97,14 +97,14 @@ export const refreshTokenService = async(token)=>{
         {
         userId:decoded.userId,
         email:decoded.email},
-        env.jwt_secret,"1m");
+        tokenKeys.jwt_secret,"1m");
     // create new token : refresh token
     const refreshToken = generateToken(
         {
         userId:decoded.userId,
         email:decoded.email
         },
-        env.ref_secret,"7d");
+        tokenKeys.refresh_secret,"7d");
     // refreshed token : hashing 
     const hashed = await bcrypt.hash(refreshToken,10);
 

@@ -1,7 +1,7 @@
+import { poolOption } from "./config/env.js";
 import app from "./app.js";
-import { env } from "./config/env.js";
 
 // Run server
-app.listen(env.port,()=>{
-    console.log(`Server listen on port:${env.port}`)
+app.listen(poolOption.port,()=>{
+    console.log(`Server listen on port:${poolOption.port}`)
 })

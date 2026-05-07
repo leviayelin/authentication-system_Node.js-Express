@@ -1,6 +1,6 @@
 // import section
+import { tokenKeys } from "../config/env.js";
 import jwt  from "jsonwebtoken";
-import { env } from "../config/env.js";
 
 // middleware authentication - Verify token
 // note - this used to check/verify user  request 
@@ -16,7 +16,7 @@ export const verifyToken = (req,res,next)=>{
         // - check for signature (secret)
         // - check if expire
         // - return payload
-        const decoded = jwt.verify(token, env.jwt_secret);
+        const decoded = jwt.verify(token,tokenKeys.jwt_secret);
         req.user = decoded;
         // forword if success
         next();

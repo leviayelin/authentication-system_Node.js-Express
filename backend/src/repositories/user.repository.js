@@ -4,7 +4,7 @@ import {pool} from '../db/db.js'
 // User registration: save user information
 export const createUser = async(first_name,last_name,email,password_hash)=>{
     const result = await pool.query(
-        `INSERT INTO users(first_name,last_name,email,password_hash)
+        `INSERT INTO users(first_name,last_name,email,hash_password)
          VALUES($1,$2,$3,$4) 
          RETURNING *`,
          [first_name,last_name,email,password_hash]);

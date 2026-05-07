@@ -14,7 +14,7 @@ router.get("/csrf-token", csrfProtection, getCSRFToken);
 router.post("/register",registerLimiter, csrfProtection, register);// new user
 router.post("/login", loginLimiter, csrfProtection, login);// asign token
 router.post("/refresh",refreshToken); // refresh token's
-router.get("/profile", verifyToken, getProfile);// vrify token
+router.get("/profile", verifyToken, getProfile);// verify token
 router.post("/logout", csrfProtection, logout); // clear cookies + token
 
 // export auth router 

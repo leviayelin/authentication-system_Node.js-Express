@@ -1,4 +1,5 @@
 // Import section 
+import { rateLimitOption } from '../config/env.js';
 import rateLimit from 'express-rate-limit';
 
 // Rate limit : api
@@ -14,8 +15,8 @@ export const loginLimiter = rateLimit({
     message:{
         message: "To Many Login Attempts, try again letter."
     },
-    standardHeaders:true,
-    legacyHeaders:false
+    standardHeaders:rateLimit.standardHeaders,
+    legacyHeaders:rateLimit.legacyHeaders
 });
 
 // Rate limit : register

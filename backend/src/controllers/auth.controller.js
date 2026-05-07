@@ -1,9 +1,9 @@
 // import section
+import 'dotenv/config';
 import { registerUser, loginUser, getUserProfile, refreshTokenService } from "../service/auth.service.js";
 import jwt from "jsonwebtoken";
-import 'dotenv/config';
 import bcrypt from 'bcrypt';
-import { env } from "../config/env.js";
+import { cookiesOption } from "../config/env.js";
 import { generateToken } from "../utils/generateToken.js";
 import { saveRefreshToken } from "../repositories/user.repository.js";
 
@@ -39,17 +39,17 @@ export const login = async(req,res,next) =>{
 
         // cookies : access + refresh
         res.cookie("accessToken", accessToken,{
-            httpOnly:true,
-            secure:process.env.COOKIE_SECURE,
+            httpOnly:cookiesOption.cookie_httpOnly,
+            secure:cookiesOption.cookie_secure,
             maxAge:1000 * 60 * 1,
-            sameSite:"Lax"
+            sameSite:cookiesOption.cookie_sameSite
         });
         
         res.cookie("refreshToken", refreshToken,{
-            httpOnly:true,
-            secure:process.env.COOKIE_SECURE,
+            httpOnly:cookiesOption.cookie_httpOnly,
+            secure:cookiesOption.cookie_secure,
             maxAge:1000 * 60 * 60 * 24 * 7,
-            sameSite:"Lax"
+            sameSite:cookiesOption.cookie_sameSite
         });
         
         return res.status(200).json({message:"Login successfull"});
@@ -69,18 +69,18 @@ export const refreshToken = async(req,res,next)=>{
         const {accessToken, refreshToken} = await refreshTokenService(token);
 
         res.cookie("accessToken", accessToken,{
-            httpOnly:true,
-            secure:process.env.COOKIE_SECURE,
+            httpOnly:cookiesOption.cookie_httpOnly,
+            secure:cookiesOption.cookie_secure,
             maxAge:1000 * 60 * 1,
-            sameSite:"Lax"
+            sameSite:cookiesOption.cookie_sameSite
         });
 
         res.cookie("refreshToken", refreshToken,{
-            httpOnly:true,
-            secure:process.env.COOKIE_SECURE,
+            httpOnly:cookiesOption.cookie_httpOnly,
+            secure:cookiesOption.cookie_secure,
             maxAge:1000 * 60 * 60 * 24 * 7,
-            sameSite:"Lax"
-        })
+            sameSite:cookiesOption.cookie_sameSite
+        });
 
         return res.status(200).json({message:"Token Refreshed"});
     }catch(err){

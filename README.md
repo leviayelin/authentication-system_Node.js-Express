@@ -1,4 +1,8 @@
-# User Form Project
+# Project : User Authentication System  
+
+![Node](https://img.shields.io/badge/node-js-green)
+![Js](https://img.shields.io/badge/vanilla-js-orange)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
 
 ## Main Objective
 This project was created for learning and practice purposes, in order to gain a better understand of:
@@ -15,14 +19,31 @@ and additional concepts as the project continues to evolve.
 
 ## Learning Goals
 
-This project was created to practice:
+The main goals of This project were:
 
-- REST API development
-- Client-server architecture
+- Understand Client-server architecture
+- Build a REST API
 - MVC design pattern
+- Apply layerd architecture (Controller/ Service/ Repository)
+- Implement Authentication & Security best practice
 - Full-stack JavaScript development
 - Working with PostgreSQL
-- Authentication, Data integrity & Security
+- Practice with Docker-based env setup 
+- Improve code quality through Refactoring & Error handling
+
+---
+
+## Key Concepts Covered
+
+- REST API design
+- JWT Authentication (Access & Refresh Tokens)
+- HTTP-only Cookies
+- CSRF Protection
+- Token Refresh Flow & Rotation
+- Rate Limiting
+- Secure password hashing (bcrypt)
+- CORS & cross-origin requests
+- Docker containerization
 
 ---
 
@@ -42,31 +63,39 @@ The backend is structured using a layered architecture inspired by the MVC patte
 
 ### Frontend (Client Side)
 
-- HTML
-- CSS
+- HTML5
+- CSS3
 - Bootstrap (framework)
-- JavaScript (Vanilla)
+- Vanilla JavaScript (SPA structure)
 
 ### Backend (Server Side)
 
 - Node.js
-- Express
-- REST API
+- Express.js
+- REST API architrcture
 
 ### Database
 
 - PostgreSQL
 
+### DevOps
+
+- Docker
+- Docker Compose
+
 ---
 
 ## Features
 
-- User registration form
-- User login form
-- Protected dashboard page
-- Client-server communication using REST API
-- JWT authentication
-- Layered architecture (Controller / Service / Repository)
+- User registration & Login forms
+- Protected dashboard (authenticated access only)
+- JWT-based authentication (access & refresh)
+- Secure Cookie (httpOnly , sameSite)
+- CSRF protection
+- Token refresh mechanism
+- Rate limiter (API protection)
+- Layered backend architecture (Controller / Service / Repository)
+- Dockerized enviroment
 
 ## Project Structure
 
@@ -82,7 +111,7 @@ The backend is structured using a layered architecture inspired by the MVC patte
         |   └── public /          # static files 
         │
         └── Server /            # Backend (Node.js / API)
-            ├── database /      # storage 
+            ├── database /      # storage,migration,seed
             └── src /           # backend files
                 ├── routes /        # API routes (endpoint mapping)
                 ├── middleware /    # auth, validation etc..
@@ -94,53 +123,84 @@ The backend is structured using a layered architecture inspired by the MVC patte
                 └── config /        # app configuration
         
 
----
+
 
 ## Authentication Flow
 
-### Register
+### 1. Register
 
-User submits registration form  
+→ User submits registration form  
 → Server validates input  
 → Password is hashed using bcrypt  
 → User is saved in the database  
+→ User redirect to Login page 
 
 ![Preview](./assets/register-page.png)
 
 ---
 
-### Login
+### 2. Login
 
-User submits credentials  
-→ Server verifies user existence  
+→ User submits credentials  
+→ Server verifies credentials  
 → Password is compared using bcrypt  
-→ JWT token is generated and returned  
-→ Token stored in cookies
+→ Access Token (short-lived) created  
+→ Refresh Token (long-lived) created  
+→ Tokens stored in httpOnlycookies  
+→ User redirect to protected pages
 
 
 ![Preview](./assets/login-page.png)
 ---
 
-### Protected Routes
+### 3. Access Protected Routes
 
-Client sends request with JWT  
-→ Middleware verifies token  
-→ If valid, request continues  
-→ If not, access is denied  
+→ Client sends request with cookies  
+→ Middleware verifies access token  
+→ If valid => allow access  
+→ If expire => trigger refresh flow  
 
 ![preview](./assets/dashboard-page.png)
 
+### 4. Token Refresh
+
+→ Client detects 401 response  
+→ Sends request to `/refresh`  
+→ Server validates refresh token  
+→ New access token issued
+
+---
+
 ## Security
 
-- Passwords are hashed using bcrypt
-- Sensitive data (password_hash) is never returned to the client
-- Protected routes require a valid JWT
-- cookie httpOnly secure session handling
-- CSRF Token protection 
-- Basic input validation is implemented
-- Regex email format check
+- Passwords hashing with bcrypt
+- httpOnly cookies (prevent XSS access)
+- CSRF protection using Token 
+- Refresh token rotation (prevent reuse attacks)
+- Rate limiting (prevent brute-force attacks)
+- input validation & sanitiztion (Regex) 
+- Sensitive data nevver exposed
 
-## Installation
+---
+
+## Setup
+###  Docker Setup
+
+This project runs in a containerized environment using Docker.
+
+### Services:
+
+- `frontend` → serves client (port 8080)
+- `backend` → API server (port 3000)
+- `postgres` → database (port 5432)
+
+### Run project:
+```bash
+docker-compose up --build
+```
+
+### Installation (Without Docker)
+
 
 Clone the repository:
 
@@ -153,6 +213,24 @@ Install dependencies:
 Run the server:
 
     npm start
+
+
+### Environment Variables (Example)
+
+    PORT=3000  
+    DB_HOST=postgres_db  
+    DB_USER=postgres  
+    DB_PASSWORD=yourpassword  
+    JWT_SECRET=your_secret  
+    REFRESH_SECRET=your_refresh_secret
+
+## API Endpoints
+
+    POST /api/auth/register  
+    POST /api/auth/login  
+    POST /api/auth/refresh  
+    GET  /api/auth/profile  
+    POST /api/auth/logout      
 
 
 ## Future Improvements
