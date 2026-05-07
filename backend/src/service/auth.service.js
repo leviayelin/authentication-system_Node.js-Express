@@ -5,7 +5,7 @@ import jwt, { decode } from 'jsonwebtoken';
 import { createUser, getUserByEmail,findUserById, getUserRefreshToken, deleteAllUsersTokens, deleteRefreshToken, saveRefreshToken } from "../repositories/user.repository.js";
 import { generateToken } from '../utils/generateToken.js';
 
-// Register user
+// User registration : check validation & password hashing 
 export const registerUser = async({first_name,last_name,email,password})=>{
     // check for already existing user
     const existingUser = await getUserByEmail(email);
@@ -29,7 +29,7 @@ export const registerUser = async({first_name,last_name,email,password})=>{
     return user;
 };
 
-// Login user
+// User Login (Authentication) : compare credentials & generate and access, refresh tokens
 export const loginUser = async({email, password})=>{
     //1. find user
     const user = await getUserByEmail(email)
@@ -68,7 +68,9 @@ export const loginUser = async({email, password})=>{
 export const refreshTokenService = async(token)=>{
 
     if(!token){
-        throw new Error("No token");
+       const error = new Error("No token");
+       error.status = 401;
+       throw error;
     };
     let decoded;
     try{
@@ -118,7 +120,7 @@ export const refreshTokenService = async(token)=>{
 };
 
 
-// get user Profile
+// Protected pages : get user Profile
 export const getUserProfile = async (userId)=>{
     const user = await findUserById(userId);
     if(!user){

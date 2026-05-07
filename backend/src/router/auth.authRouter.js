@@ -9,8 +9,8 @@ import { loginLimiter,registerLimiter } from '../middleware/auth.rateLimitMiddle
 // setting router
 const router = express.Router();
 
-// config routes - API methods & routes
-router.get("/csrf-token", csrfProtection, getCSRFToken);
+// config routes : API methods & routes
+router.get("/csrf-token", csrfProtection, getCSRFToken); // CSRF protection token
 router.post("/register",registerLimiter, csrfProtection, register);// new user
 router.post("/login", loginLimiter, csrfProtection, login);// asign token
 router.post("/refresh",refreshToken); // refresh token's

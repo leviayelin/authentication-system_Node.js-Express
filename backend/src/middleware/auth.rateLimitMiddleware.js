@@ -2,13 +2,13 @@
 import { rateLimitOption } from '../config/env.js';
 import rateLimit from 'express-rate-limit';
 
-// Rate limit : api
+// Rate limiting : api
 export const apiLimiter = rateLimit({
     windowMs: 60*1000,
     max:100
 });
 
-// Rate limit : login 
+// Rate limiting : login 
 export const loginLimiter = rateLimit({
     windowMs: 60*1000, // time window in milisecons
     max: 3, //attempts
@@ -19,7 +19,7 @@ export const loginLimiter = rateLimit({
     legacyHeaders:rateLimit.legacyHeaders
 });
 
-// Rate limit : register
+// Rate limiting : register
 export const registerLimiter = rateLimit({
     windowMs:10*60*1000,
     max:3,

@@ -7,7 +7,7 @@ import path from "path";
 // setting section 
 const migrationPath = path.join("database","migrations");
 
-// migration function - migrate new changes to database
+// migration function : migrate new added changes to database
 const runMigration = async()=>{
     // 1. sorting all migrations files 
     const files = fs.readdirSync(migrationPath).sort();

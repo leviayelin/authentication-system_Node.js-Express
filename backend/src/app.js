@@ -7,7 +7,7 @@ import authRouter from './router/auth.authRouter.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
 import { apiLimiter } from './middleware/auth.rateLimitMiddleware.js';
 
-//app usage settings
+//app global usage settings
 const app = express();
 app.use(express.json()); // enable json
 app.use(cors(corsOption)); // cors http - connect to frontend

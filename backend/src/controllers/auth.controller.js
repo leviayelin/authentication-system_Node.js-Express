@@ -7,7 +7,7 @@ import { cookiesOption } from "../config/env.js";
 import { generateToken } from "../utils/generateToken.js";
 import { saveRefreshToken } from "../repositories/user.repository.js";
 
-// register request handling
+// register request handling : Get user input & check input integrity
 export const register = async (req,res,next)=>{
     try{
         // validation error handling
@@ -27,7 +27,7 @@ export const register = async (req,res,next)=>{
     };
 };
 
-// login request handling 
+// Login request handling : Get user credentials, use tokens with cookies httpOnly
 export const login = async(req,res,next) =>{
     try{
         // validation error handling
@@ -35,6 +35,7 @@ export const login = async(req,res,next) =>{
         if(!email || !password){
             return res.status(400).json({message:"email & password required!"});
         };
+
         const {accessToken, refreshToken} = await loginUser(req.body);
 
         // cookies : access + refresh
@@ -59,7 +60,7 @@ export const login = async(req,res,next) =>{
     };
 };
 
-// refresh route 
+// Refresh token request : Get new access and refresh tokem (rotation) 
 export const refreshToken = async(req,res,next)=>{
     const token = req.cookies.refreshToken;
     if(!token){
@@ -84,12 +85,12 @@ export const refreshToken = async(req,res,next)=>{
 
         return res.status(200).json({message:"Token Refreshed"});
     }catch(err){
-        // return res.status(403).json({message:"Invalid Refresh Token"});
+        // middleware error handling 
         next(err)
     }
 };
 
-// get profile request handling
+// Profile request handling : Get protected pages
 export const getProfile = async(req,res,next)=>{
     try{
         const user = await getUserProfile(req.user.userId)
@@ -100,7 +101,7 @@ export const getProfile = async(req,res,next)=>{
     };
 };
 
-// logout - clear remain cookies in browser + logout user
+// Logout request : Clear remain cookies in browser + logout user
 export const logout = (req,res)=>{
     res.clearCookie("_csrf");
     res.clearCookie("accessToken");
@@ -108,7 +109,7 @@ export const logout = (req,res)=>{
     res.json({message:"Loged out"});
 };
 
-// get CSRF token 
+// CSRF token request : CSRF token protection 
 export const getCSRFToken = (req,res)=>{
     res.json({csrfToken: req.csrfToken()});
 };

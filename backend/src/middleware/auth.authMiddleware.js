@@ -2,7 +2,7 @@
 import { tokenKeys } from "../config/env.js";
 import jwt  from "jsonwebtoken";
 
-// middleware authentication - Verify token
+// middleware authentication : Verify access token (user login request)
 // note - this used to check/verify user  request 
 export const verifyToken = (req,res,next)=>{
     // check for cookies in request

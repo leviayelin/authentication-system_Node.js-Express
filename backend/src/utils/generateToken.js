@@ -1,7 +1,7 @@
 // Import section 
 import jwt from 'jsonwebtoken';
 
-// json web token generator
+// JWT generator callback function 
 export const generateToken = (payload,secret,expire) =>{
     return jwt.sign(
         payload,
