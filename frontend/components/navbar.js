@@ -4,9 +4,11 @@ import { getProfile, logout } from "../services/auth.service.js";
 
 // Navbar Component
 export const renderNavbar = async()=>{
+    // navbar change based on user logged 
     const navbar = document.getElementById('navbar');
     let isAuth = false;
     try{
+        // false status,  print to console everytime user not logged 
         const res = await getProfile();
         if(res?.user){
             isAuth = true

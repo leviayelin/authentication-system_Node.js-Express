@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 // navigation delegation
-// 1.body listen to on all document click event
+// 1.body listen to all document click event
 document.body.addEventListener("click", (e) => {
     // 2.if clicked target gets to tag 'a'
     if (e.target.tagName === "A") {

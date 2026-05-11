@@ -50,15 +50,10 @@ export const renderLogin = () =>{
         // clear messages
         clearMessages(messages); 
         
-        // creating new  object of form data 
+        // creating new object of form data 
         const formData = new FormData(form);
         // attached field data to veriable 
         const data = Object.fromEntries(formData);
-        //note: use object.fromEntries() get's all filed values -
-        // const data = {
-        //     email:formData.get("email"),
-        //     password:formData.get("password")
-        // };
 
         // validation section 
         const error = loginValidation(data);
@@ -82,3 +77,9 @@ export const renderLogin = () =>{
         };
     });
 };
+
+//note: use object.fromEntries() get's all filed values -
+// const data = {
+//     email:formData.get("email"),
+//     password:formData.get("password")
+// };

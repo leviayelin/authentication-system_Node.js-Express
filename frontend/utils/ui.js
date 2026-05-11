@@ -1,5 +1,5 @@
 // button halper - 
-// note: help preventing breaking of code by multipol clicking 
+// note: help preventing breaking of code by multiple clicking 
 export const setLoading = (button, isLoading  ) =>{
     button.disabled = isLoading;
     button.textContent = isLoading ? "Loading..." : "Login" ;
@@ -8,7 +8,7 @@ export const setLoading = (button, isLoading  ) =>{
 //  messages - show message
 export const showMessages = (el, text, type="error") =>{
     el.textContent = text;
-    el.style.color = type === "error" ?"red":"green";
+    el.style.color = type === "error"?"red":"green";
 };
 
 // message - clear message

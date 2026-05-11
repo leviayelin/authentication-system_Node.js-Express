@@ -10,7 +10,7 @@ import { authRequirment } from "../utils/authentication.js";
 
 // setting routes 
 const routes = {
-    "/":renderDashboard,
+    "/":renderLogin,
     "/login":renderLogin,
     "/register":renderRegister,
     "/dashboard":renderDashboard

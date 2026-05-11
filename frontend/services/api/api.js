@@ -1,3 +1,4 @@
+// =============================================
 // API Service : Login, Register, Dashboard
 // =============================================
 // Import section
@@ -26,9 +27,9 @@ export const apiFetch = async(url, options={})=>{
     
     // eccess token expired
     if(res.status === 401 && !options._retry){
-        if(url.includes("/refresh")){
-            throw new Error("Session expired");
-        };
+        // if(url.includes("/refresh")){
+        //     throw new Error("Session expired");
+        // };
 
         // prevent infinite loop
         options._retry = true;

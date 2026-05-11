@@ -1,5 +1,6 @@
+// ==================================
 // Utilities - validations
-
+// ==================================
 // regex - curret format for email
 const validationEmail = (email)=>{
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,7 +39,7 @@ export const registerValidation = ({first_name,last_name,email,password})=>{
     return null; 
 };
 
-// this utility is instead of this code:
+// the top utility is instead of this code:
 
 // empty fields
 // if(!email || !password){
