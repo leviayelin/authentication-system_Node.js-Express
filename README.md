@@ -3,9 +3,10 @@
 ![Node](https://img.shields.io/badge/node-js-green)
 ![Js](https://img.shields.io/badge/vanilla-js-orange)
 ![Docker](https://img.shields.io/badge/docker-ready-blue)
+![Release](https://img.shields.io/badge/release-v1.0.0-blue)
 
 ## Main Objective
-This project was created for learning and practice purposes, in order to gain a better understand of:
+This project was created for learning and practice purposes, in order to gain a better understanding of:
 
 - Architecture structure
 - Technology stack usage
@@ -116,7 +117,7 @@ The backend is structured using a layered architecture inspired by the MVC patte
                 ├── routes /        # API routes (endpoint mapping)
                 ├── middleware /    # auth, validation etc..
                 ├── controllers /   # handle HTTP req / res 
-                ├── services /      # business loginc
+                ├── services /      # business logic
                 ├── repositories /  # database queries
                 ├── db /            # database connection
                 ├── utils /         # utilities function
@@ -146,7 +147,7 @@ The backend is structured using a layered architecture inspired by the MVC patte
 → Password is compared using bcrypt  
 → Access Token (short-lived) created  
 → Refresh Token (long-lived) created  
-→ Tokens stored in httpOnlycookies  
+→ Tokens stored in httpOnly cookies  
 → User redirect to protected pages
 
 
@@ -179,11 +180,11 @@ The backend is structured using a layered architecture inspired by the MVC patte
 - Refresh token rotation (prevent reuse attacks)
 - Rate limiting (prevent brute-force attacks)
 - input validation & sanitiztion (Regex) 
-- Sensitive data nevver exposed
+- Sensitive data never exposed
 
 ---
 
-## Setup
+## Installation & Setup
 ###  Docker Setup
 
 This project runs in a containerized environment using Docker.
@@ -197,6 +198,10 @@ This project runs in a containerized environment using Docker.
 ### Run project:
 ```bash
 docker-compose up --build
+```
+ Running check 
+```bash
+docker ps
 ```
 
 ### Installation (Without Docker)
@@ -217,14 +222,25 @@ Run the server:
 
 ### Environment Variables (Example)
 
-    PORT=3000  
-    DB_HOST=postgres_db  
-    DB_USER=postgres  
-    DB_PASSWORD=yourpassword  
-    JWT_SECRET=your_secret  
+    # DB
+    PORT=3000
+    DB_PORT=5432  
+    DB_HOST=your_db_host  
+    DB_USER=your_user
+    DB_NAME=your_db_name  
+    DB_PASSWORD=your_password  
+
+    # JWT
+    JWT_SECRET=your_jwt_secret  
     REFRESH_SECRET=your_refresh_secret
 
-## API Endpoints
+    # COOKIES
+    COOKIE_SAMESITE=# secure | Lax
+
+    # CORS
+    ORIGIN_PORT=your_origin_port
+
+### API Endpoints
 
     POST /api/auth/register  
     POST /api/auth/login  
@@ -232,13 +248,35 @@ Run the server:
     GET  /api/auth/profile  
     POST /api/auth/logout      
 
+### Database Migration Instruction
+migration (no Docker)
 
-## Future Improvements
+```bash
+npm run migrate
+```
+migration on Docker
 
-- Implement advanced validation (e.g. Joi / Zod)
-- Add refresh token mechanism (refresh token rotation)
-- Rate limiter
-- Coockies (httpOnly)
+```bash
+docker-compose exec backend npm run migrate
+```
+---
+## Future Learn/Improvements
+
+- Role-based authorization (admin/user)
+- Email verification
+- Password reset flow
+- Advanced validation (Joi / Zod)
+- Logging system (Winston / Morgan)
+- Full test coverage (unit + integration)
+- CI/CD pipeline
 - Improve error handling with centralized middleware
 - Add role-based authorization (admin / user)
 - Migrate token storage to httpOnly cookies for better security
+
+## What i've Learned
+
+- Designing secure authentication systems
+- Managing tokens and sessions correctly
+- Handling edge cases (expiration, reuse, errors)
+- Structuring scalable backend architecture
+- Working with Docker and multi-service apps

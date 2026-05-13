@@ -1,6 +1,14 @@
+# dependencies
 backend/node_modules
-PROJECT_PLAN.md
-notes.txt
+
+# IDE
 .vscode
+
+# env files
 .env
- 
+
+# docker valumes/data
+pgdata/
+
+# temp    
+PROJECT_PLAN.md

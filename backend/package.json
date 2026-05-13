@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Authentication system",
   "license": "ISC",
   "author": "Levi wasa",
   "type": "module",
