@@ -12,7 +12,7 @@ export const createUser = async(first_name,last_name,email,password_hash)=>{
         return result.rows[0];
     }catch(err){
         throw new Error("Database Error");
-    }''
+    };
 }; 
 
 // User authentication (login) : get user by email

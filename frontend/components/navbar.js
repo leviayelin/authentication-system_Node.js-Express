@@ -11,11 +11,11 @@ export const renderNavbar = async()=>{
         // false status,  print to console everytime user not logged 
         const res = await getProfile();
         if(res?.user){
-            isAuth = true
-        }
+            isAuth = true;
+        };
     }catch(err){
-        isAuth = false
-    }
+        isAuth = false;
+    };
     if(isAuth){
         // loged-in user navbar
         navbar.innerHTML = `
