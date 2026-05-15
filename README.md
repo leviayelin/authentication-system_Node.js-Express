@@ -16,7 +16,6 @@ This project was created for learning and practice purposes, in order to gain a 
 
 and additional concepts as the project continues to evolve.
 
----
 
 ## Learning Goals
 
@@ -32,7 +31,6 @@ The main goals of This project were:
 - Practice with Docker-based env setup 
 - Improve code quality through Refactoring & Error handling
 
----
 
 ## Key Concepts Covered
 
@@ -46,7 +44,6 @@ The main goals of This project were:
 - CORS & cross-origin requests
 - Docker containerization
 
----
 
 ## About - Project Overview
 
@@ -58,7 +55,6 @@ The system follows a client–server architecture, where the client communicates
 
 The backend is structured using a layered architecture inspired by the MVC pattern, separating concerns into controllers, services, and repositories to improve maintainability and scalability.
 
----
 
 ## Technology Stack
 
@@ -84,7 +80,6 @@ The backend is structured using a layered architecture inspired by the MVC patte
 - Docker
 - Docker Compose
 
----
 
 ## Features
 
@@ -138,7 +133,7 @@ The backend is structured using a layered architecture inspired by the MVC patte
 
 ![Preview](./assets/register-page.png)
 
----
+
 
 ### 2. Login
 
@@ -152,7 +147,7 @@ The backend is structured using a layered architecture inspired by the MVC patte
 
 
 ![Preview](./assets/login-page.png)
----
+
 
 ### 3. Access Protected Routes
 
@@ -170,7 +165,6 @@ The backend is structured using a layered architecture inspired by the MVC patte
 → Server validates refresh token  
 → New access token issued
 
----
 
 ## Security
 
@@ -182,7 +176,6 @@ The backend is structured using a layered architecture inspired by the MVC patte
 - input validation & sanitiztion (Regex) 
 - Sensitive data never exposed
 
----
 
 ## Installation & Setup
 ###  Docker Setup
@@ -221,33 +214,33 @@ Run the server:
 
 
 ### Environment Variables (Example)
+```javascript
+//DB
+PORT=3000
+DB_PORT=5432  
+DB_HOST=your_db_host  
+DB_USER=your_user
+DB_NAME=your_db_name  
+DB_PASSWORD=your_password  
 
-    # DB
-    PORT=3000
-    DB_PORT=5432  
-    DB_HOST=your_db_host  
-    DB_USER=your_user
-    DB_NAME=your_db_name  
-    DB_PASSWORD=your_password  
+//JWT
+JWT_SECRET=your_jwt_secret  
+REFRESH_SECRET=your_refresh_secret
 
-    # JWT
-    JWT_SECRET=your_jwt_secret  
-    REFRESH_SECRET=your_refresh_secret
+//COOKIES
+COOKIE_SAMESITE=secure or Lax
 
-    # COOKIES
-    COOKIE_SAMESITE=# secure | Lax
-
-    # CORS
-    ORIGIN_PORT=your_origin_port
-
+//CORS
+ORIGIN_PORT=your_origin_port
+```
 ### API Endpoints
-
-    POST /api/auth/register  
-    POST /api/auth/login  
-    POST /api/auth/refresh  
-    GET  /api/auth/profile  
-    POST /api/auth/logout      
-
+```javascript
+POST /api/auth/register  
+POST /api/auth/login  
+POST /api/auth/refresh  
+GET  /api/auth/profile  
+POST /api/auth/logout      
+```
 ### Database Migration Instruction
 migration (no Docker)
 
@@ -259,7 +252,15 @@ migration on Docker
 ```bash
 docker-compose exec backend npm run migrate
 ```
----
+
+
+## What i've Learned
+
+- Designing secure authentication systems
+- Managing tokens and sessions correctly
+- Handling edge cases (expiration, reuse, errors)
+- Structuring scalable backend architecture
+- Working with Docker and multi-service apps
 ## Future Learn/Improvements
 
 - Role-based authorization (admin/user)
@@ -272,11 +273,3 @@ docker-compose exec backend npm run migrate
 - Improve error handling with centralized middleware
 - Add role-based authorization (admin / user)
 - Migrate token storage to httpOnly cookies for better security
-
-## What i've Learned
-
-- Designing secure authentication systems
-- Managing tokens and sessions correctly
-- Handling edge cases (expiration, reuse, errors)
-- Structuring scalable backend architecture
-- Working with Docker and multi-service apps
